@@ -163,7 +163,7 @@ export default function LoginPage() {
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
           <div style={{ textAlign: "center", fontSize: 15, marginTop: 8 }}>
             Don't have an account?{' '}
-            <a href="#" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
+            <a href="/register" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
           </div>
         </div>
       </div>
