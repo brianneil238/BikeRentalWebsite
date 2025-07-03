@@ -99,15 +99,25 @@ export default function LoginPage() {
           zIndex: 1,
         }}
       />
+      <style>{`
+        @media (max-width: 600px) {
+          .login-flex-container {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+        }
+      `}</style>
       <div
+        className="login-flex-container"
         style={{
           position: "relative",
           zIndex: 2,
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           alignItems: "flex-start",
           height: "100vh",
-          paddingLeft: "5vw",
+          paddingLeft: "0",
           paddingRight: "5vw",
           paddingTop: "8vw",
         }}
