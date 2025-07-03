@@ -76,46 +76,56 @@ export default function LoginPage() {
   } as const;
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      width: "100vw",
-      backgroundImage: `url('/car-rental-app.jpg')`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundColor: "#aaa",
-      position: "relative"
-    }}>
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(128,128,128,0.7)",
-        zIndex: 1
-      }} />
-      <div style={{
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100vw",
+        backgroundImage: `url('/car-rental-app.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#aaa",
         position: "relative",
-        zIndex: 2,
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        height: "100vh",
-        paddingLeft: "1000px",
-        paddingTop: "120px"
-      }}>
-        <div style={{
-          background: "#f5f5f5",
-          borderRadius: 20,
-          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-          padding: "40px 40px 24px 40px",
-          width: 400,
-          maxWidth: "90vw",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(128,128,128,0.7)",
+          zIndex: 1,
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
           display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch"
-        }}>
+          justifyContent: "center",
+          alignItems: "flex-start",
+          height: "100vh",
+          paddingLeft: "5vw",
+          paddingRight: "5vw",
+          paddingTop: "8vw",
+        }}
+      >
+        <div
+          style={{
+            background: "#f5f5f5",
+            borderRadius: 20,
+            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            padding: "32px 16px 16px 16px",
+            width: "100%",
+            maxWidth: 400,
+            minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
             <img src="/spartan_logo.png" alt="Sparta Logo" style={{ width: 48, height: 48, marginRight: 10 }} />
             <div>
