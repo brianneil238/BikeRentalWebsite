@@ -112,7 +112,7 @@ export default function RegisterPage() {
         alignItems: "flex-start",
         height: "100vh",
         paddingLeft: "1000px",
-        paddingTop: "120px"
+        paddingTop: "90px"
       }}>
         <div style={{
           background: "#f5f5f5",
