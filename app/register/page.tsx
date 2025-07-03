@@ -1,9 +1,18 @@
 "use client";
 import { useState } from "react";
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
+const roles = [
+  { value: "student", label: "Student" },
+  { value: "teaching_staff", label: "Teaching Staff" },
+  { value: "non_teaching_staff", label: "Non-Teaching Staff" },
+];
+
+export default function RegisterPage() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState(roles[0].value);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [notRobot, setNotRobot] = useState(false);
@@ -16,17 +25,8 @@ export default function LoginPage() {
       setError("Please confirm you are not a robot.");
       return;
     }
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    if (res.ok) {
-      setSuccess("Login successful!");
-    } else {
-      const data = await res.json();
-      setError(data.error || "Login failed");
-    }
+    // Simulate registration success
+    setSuccess("Registration successful! You can now log in.");
   };
 
   return (
@@ -56,7 +56,7 @@ export default function LoginPage() {
         justifyContent: "flex-start",
         alignItems: "flex-start",
         height: "100vh",
-        paddingLeft: "1000px",
+        paddingLeft: "500px",
         paddingTop: "120px"
       }}>
         <div style={{
@@ -77,14 +77,14 @@ export default function LoginPage() {
               <div style={{ fontSize: 14, color: "#444" }}>Rent. Ride. Return. Spartan-style.</div>
             </div>
           </div>
-          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Please Log In</h2>
+          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Register</h2>
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: 14 }}>
               <input
                 type="text"
-                placeholder="Email"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                placeholder="Full Name"
+                value={fullName}
+                onChange={e => setFullName(e.target.value)}
                 required
                 style={{
                   width: "100%",
@@ -97,12 +97,12 @@ export default function LoginPage() {
                 }}
               />
             </div>
-            <div style={{ marginBottom: 6 }}>
+            <div style={{ marginBottom: 14 }}>
               <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 required
                 style={{
                   width: "100%",
@@ -110,12 +110,65 @@ export default function LoginPage() {
                   borderRadius: 6,
                   border: "1px solid #ccc",
                   fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-7V7a6 6 0 0 0-12 0v3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-8-3a4 4 0 0 1 8 0v3H6V7z\'/></svg>') no-repeat 10px center`,
+                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z\'/></svg>') no-repeat 10px center`,
                   backgroundColor: "#f7f7f7"
                 }}
               />
             </div>
-            <div style={{ fontSize: 12, color: "#888", marginBottom: 10 }}>* Password is case sensitive</div>
+            <div style={{ marginBottom: 14, position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                style={{
+                  width: "100%",
+                  padding: "12px 40px 12px 40px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  fontSize: 16,
+                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-7V7a6 6 0 0 0-12 0v3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-8-3a4 4 0 0 1 8 0v3H6V7z\'/></svg>') no-repeat 10px center`,
+                  backgroundColor: "#f7f7f7"
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(s => !s)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 14,
+                  color: "#1976d2"
+                }}
+                tabIndex={-1}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+            <div style={{ marginBottom: 18 }}>
+              <select
+                value={role}
+                onChange={e => setRole(e.target.value)}
+                required
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  fontSize: 16,
+                  backgroundColor: "#f7f7f7"
+                }}
+              >
+                {roles.map(r => (
+                  <option key={r.value} value={r.value}>{r.label}</option>
+                ))}
+              </select>
+            </div>
             <div style={{
               background: "#f7f7f7",
               borderRadius: 6,
@@ -156,17 +209,17 @@ export default function LoginPage() {
                 boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
               }}
             >
-              Sign In
+              Register
             </button>
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
           <div style={{ textAlign: "center", fontSize: 15, marginTop: 8 }}>
-            Don't have an account?{' '}
-            <a href="#" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
+            Already have an account?{' '}
+            <a href="/" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign In</a>
           </div>
         </div>
       </div>
     </div>
   );
-}
+} 
