@@ -53,10 +53,11 @@ export default function LoginPage() {
         position: "relative",
         zIndex: 2,
         display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
         height: "100vh",
-        paddingRight: "60px"
+        paddingLeft: "1100px",
+        paddingTop: "120px"
       }}>
         <div style={{
           background: "#f5f5f5",
