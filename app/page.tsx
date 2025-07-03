@@ -1,9 +1,25 @@
 "use client";
 import { useState } from "react";
 
+function Icon({ type }: { type: string }) {
+  switch (type) {
+    case "mail":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>;
+    case "lock":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="8" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>;
+    case "eye":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>;
+    case "eye-off":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.77 21.77 0 0 1 5.06-6.06M1 1l22 22"/><path d="M9.53 9.53A3.5 3.5 0 0 0 12 15.5a3.5 3.5 0 0 0 2.47-5.97"/></svg>;
+    default:
+      return null;
+  }
+}
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [notRobot, setNotRobot] = useState(false);
@@ -28,6 +44,36 @@ export default function LoginPage() {
       setError(data.error || "Login failed");
     }
   };
+
+  const inputGroupStyle = {
+    display: "flex",
+    alignItems: "center",
+    background: "#f7f7f7",
+    borderRadius: 6,
+    border: "1px solid #ccc",
+    marginBottom: 16,
+    padding: 0,
+    height: 48,
+  } as const;
+  const iconBoxStyle = {
+    background: "#e9ecef",
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    width: 48,
+    height: 48,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  } as const;
+  const inputStyle = {
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontSize: 16,
+    padding: "0 12px",
+    flex: 1,
+    height: 48,
+  } as const;
 
   return (
     <div style={{
@@ -79,41 +125,41 @@ export default function LoginPage() {
           </div>
           <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Please Log In</h2>
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: 14 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="mail" /></div>
               <input
                 type="text"
                 placeholder="Email"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
             </div>
-            <div style={{ marginBottom: 6 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="lock" /></div>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-7V7a6 6 0 0 0-12 0v3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-8-3a4 4 0 0 1 8 0v3H6V7z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(s => !s)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "0 12px 0 0"
+                }}
+                tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <Icon type={showPassword ? "eye-off" : "eye"} />
+              </button>
             </div>
             <div style={{ fontSize: 12, color: "#888", marginBottom: 10 }}>* Password is case sensitive</div>
             <div style={{
