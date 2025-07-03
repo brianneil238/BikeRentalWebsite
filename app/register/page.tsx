@@ -111,7 +111,7 @@ export default function RegisterPage() {
         justifyContent: "flex-start",
         alignItems: "flex-start",
         height: "100vh",
-        paddingLeft: "500px",
+        paddingLeft: "1000px",
         paddingTop: "120px"
       }}>
         <div style={{
@@ -132,7 +132,7 @@ export default function RegisterPage() {
               <div style={{ fontSize: 14, color: "#444" }}>Rent. Ride. Return. Spartan-style.</div>
             </div>
           </div>
-          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Register</h2>
+          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500, color: "#222" }}>Register</h2>
           <form onSubmit={handleSubmit}>
             <div style={inputGroupStyle}>
               <div style={iconBoxStyle}><Icon type="user" /></div>
@@ -187,7 +187,7 @@ export default function RegisterPage() {
                 value={role}
                 onChange={e => setRole(e.target.value)}
                 required
-                style={selectStyle}
+                style={{ ...selectStyle, color: '#222' }}
               >
                 {roles.map(r => (
                   <option key={r.value} value={r.value} disabled={r.value === ""}>{r.label}</option>
@@ -215,7 +215,7 @@ export default function RegisterPage() {
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
-          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8 }}>
+          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8, color: "#222" }}>
             Already have an account?{' '}
             <a href="/" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign In</a>
           </div>

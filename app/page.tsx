@@ -123,7 +123,7 @@ export default function LoginPage() {
               <div style={{ fontSize: 14, color: "#444" }}>Rent. Ride. Return. Spartan-style.</div>
             </div>
           </div>
-          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Please Log In</h2>
+          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500, color: "#222" }}>Please Log In</h2>
           <form onSubmit={handleSubmit}>
             <div style={inputGroupStyle}>
               <div style={iconBoxStyle}><Icon type="mail" /></div>
@@ -207,7 +207,7 @@ export default function LoginPage() {
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
-          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8 }}>
+          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8, color: "#222" }}>
             Don't have an account?{' '}
             <a href="/register" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
           </div>
