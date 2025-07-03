@@ -2,10 +2,31 @@
 import { useState } from "react";
 
 const roles = [
+  { value: "", label: "Select your role" },
   { value: "student", label: "Student" },
   { value: "teaching_staff", label: "Teaching Staff" },
   { value: "non_teaching_staff", label: "Non-Teaching Staff" },
 ];
+
+function Icon({ type }: { type: string }) {
+  // SVGs for user, mail, lock, gift, and eye
+  switch (type) {
+    case "user":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 16-4 16 0"/></svg>;
+    case "mail":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>;
+    case "lock":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="8" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>;
+    case "gift":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="2"/><path d="M12 7v12M2 11h20"/><circle cx="7.5" cy="5.5" r="2.5"/><circle cx="16.5" cy="5.5" r="2.5"/></svg>;
+    case "eye":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>;
+    case "eye-off":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.77 21.77 0 0 1 5.06-6.06M1 1l22 22"/><path d="M9.53 9.53A3.5 3.5 0 0 0 12 15.5a3.5 3.5 0 0 0 2.47-5.97"/></svg>;
+    default:
+      return null;
+  }
+}
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
@@ -15,18 +36,52 @@ export default function RegisterPage() {
   const [role, setRole] = useState(roles[0].value);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [notRobot, setNotRobot] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-    if (!notRobot) {
-      setError("Please confirm you are not a robot.");
+    if (!fullName || !email || !password || !role) {
+      setError("Please fill in all fields.");
       return;
     }
-    // Simulate registration success
     setSuccess("Registration successful! You can now log in.");
+  };
+
+  const inputGroupStyle = {
+    display: "flex",
+    alignItems: "center",
+    background: "#f7f7f7",
+    borderRadius: 6,
+    border: "1px solid #ccc",
+    marginBottom: 16,
+    padding: 0,
+    height: 48,
+  } as const;
+  const iconBoxStyle = {
+    background: "#e9ecef",
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    width: 48,
+    height: 48,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  } as const;
+  const inputStyle = {
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontSize: 16,
+    padding: "0 12px",
+    flex: 1,
+    height: 48,
+  } as const;
+  const selectStyle = {
+    ...inputStyle,
+    appearance: "none" as const,
+    WebkitAppearance: "none" as const,
+    MozAppearance: "none" as const,
   };
 
   return (
@@ -79,119 +134,65 @@ export default function RegisterPage() {
           </div>
           <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Register</h2>
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: 14 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="user" /></div>
               <input
                 type="text"
                 placeholder="Full Name"
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
             </div>
-            <div style={{ marginBottom: 14 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="mail" /></div>
               <input
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
             </div>
-            <div style={{ marginBottom: 14, position: "relative" }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="lock" /></div>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 40px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-7V7a6 6 0 0 0-12 0v3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-8-3a4 4 0 0 1 8 0v3H6V7z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(s => !s)}
                 style={{
-                  position: "absolute",
-                  right: 10,
-                  top: 10,
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  fontSize: 14,
-                  color: "#1976d2"
+                  padding: "0 12px 0 0"
                 }}
                 tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? "Hide" : "Show"}
+                <Icon type={showPassword ? "eye-off" : "eye"} />
               </button>
             </div>
-            <div style={{ marginBottom: 18 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="gift" /></div>
               <select
                 value={role}
                 onChange={e => setRole(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={selectStyle}
               >
                 {roles.map(r => (
-                  <option key={r.value} value={r.value}>{r.label}</option>
+                  <option key={r.value} value={r.value} disabled={r.value === ""}>{r.label}</option>
                 ))}
               </select>
-            </div>
-            <div style={{
-              background: "#f7f7f7",
-              borderRadius: 6,
-              border: "1px solid #e0e0e0",
-              padding: "10px 12px",
-              marginBottom: 18,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between"
-            }}>
-              <label style={{ display: "flex", alignItems: "center", fontSize: 15 }}>
-                <input
-                  type="checkbox"
-                  checked={notRobot}
-                  onChange={e => setNotRobot(e.target.checked)}
-                  style={{ marginRight: 8, width: 18, height: 18 }}
-                />
-                I'm not a robot
-              </label>
-              <span style={{ fontSize: 11, color: "#888" }}>
-                reCAPTCHA<br />
-                <a href="#" style={{ color: "#888", textDecoration: "underline" }}>Privacy</a> - <a href="#" style={{ color: "#888", textDecoration: "underline" }}>Terms</a>
-              </span>
             </div>
             <button
               type="submit"
