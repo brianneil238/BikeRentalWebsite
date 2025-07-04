@@ -76,12 +76,14 @@ export default function RegisterPage() {
     padding: "0 12px",
     flex: 1,
     height: 48,
+    color: "#000",
   } as const;
   const selectStyle = {
     ...inputStyle,
     appearance: "none" as const,
     WebkitAppearance: "none" as const,
     MozAppearance: "none" as const,
+    color: "#000",
   };
 
   return (

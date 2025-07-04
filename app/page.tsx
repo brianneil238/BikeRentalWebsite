@@ -73,6 +73,7 @@ export default function LoginPage() {
     padding: "0 12px",
     flex: 1,
     height: 48,
+    color: "#000",
   } as const;
 
   return (
