@@ -1,7 +1,7 @@
-"use client";
 export const dynamic = "force-dynamic";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+export const fetchCache = "force-no-store";
+import { Suspense } from "react";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 function Icon({ type }: { type: string }) {
   if (type === "lock") {
@@ -16,184 +16,13 @@ function Icon({ type }: { type: string }) {
   return null;
 }
 
-export default function ResetPasswordPage() {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
-
-  const inputGroupStyle = {
-    display: "flex",
-    alignItems: "center",
-    background: "#f7f7f7",
-    borderRadius: 6,
-    border: "1px solid #ccc",
-    marginBottom: 16,
-    padding: 0,
-    height: 48,
-  } as const;
-  const iconBoxStyle = {
-    background: "#e9ecef",
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
-    width: 48,
-    height: 48,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  } as const;
-  const inputStyle = {
-    border: "none",
-    outline: "none",
-    background: "transparent",
-    fontSize: 16,
-    padding: "0 12px",
-    flex: 1,
-    height: 48,
-    color: "#000",
-  } as const;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-    setLoading(true);
-    const res = await fetch("/api/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, password }),
-    });
-    setLoading(false);
-    if (res.ok) {
-      setSuccess("Password has been reset. You can now log in.");
-    } else {
-      const data = await res.json();
-      setError(data.error || "Failed to reset password.");
-    }
-  };
-
+export default function Page() {
   return (
-    <div style={{
-      minHeight: "100vh",
-      width: "100vw",
-      backgroundImage: `url('/car-rental-app.jpg')`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundColor: "#aaa",
-      position: "relative"
-    }}>
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(128,128,128,0.7)",
-        zIndex: 1
-      }} />
-      <style>{`
-        @media (max-width: 600px) {
-          .reset-flex-container {
-            justify-content: center !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-          }
-        }
-      `}</style>
-      <div
-        className="reset-flex-container"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "flex-start",
-          height: "100vh",
-          paddingLeft: "0",
-          paddingRight: "5vw",
-          paddingTop: "8vw",
-        }}
-      >
-        <div
-          style={{
-            background: "#f5f5f5",
-            borderRadius: 20,
-            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-            padding: "32px 16px 16px 16px",
-            width: "100%",
-            maxWidth: 400,
-            minWidth: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
-            <img src="/spartan_logo.png" alt="Sparta Logo" style={{ width: 48, height: 48, marginRight: 10 }} />
-            <div>
-              <div style={{ fontWeight: 700, color: "#b22222", fontSize: 22, letterSpacing: 1 }}>UNIVERSITY BIKE RENTAL</div>
-              <div style={{ fontSize: 14, color: "#444" }}>Rent. Ride. Return. Spartan-style.</div>
-            </div>
-          </div>
-          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500, color: "#222" }}>Reset Password</h2>
-          <form onSubmit={handleSubmit}>
-            <div style={inputGroupStyle}>
-              <div style={iconBoxStyle}><Icon type="lock" /></div>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="New Password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                style={inputStyle}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(s => !s)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "0 12px 0 0"
-                }}
-                tabIndex={-1}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                <Icon type={showPassword ? "eye-off" : "eye"} />
-              </button>
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: "100%",
-                background: "#FFD600",
-                color: "#222",
-                fontWeight: 600,
-                fontSize: 18,
-                border: "none",
-                borderRadius: 8,
-                padding: "12px 0",
-                marginBottom: 10,
-                cursor: loading ? "not-allowed" : "pointer",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
-              }}
-            >
-              {loading ? "Resetting..." : "Reset Password"}
-            </button>
-          </form>
-          {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
-          {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
-          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8, color: "#222" }}>
-            Go back to{' '}
-            <a href="/" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign In</a>
-          </div>
-        </div>
+    <Suspense fallback={null}>
+      <ResetPasswordForm />
+      <div style={{ textAlign: 'center', marginTop: 16 }}>
+        Go back to <a href="/login" style={{ color: '#1976d2', textDecoration: 'underline', fontWeight: 500 }}>Sign in</a>
       </div>
-    </div>
+    </Suspense>
   );
 } 

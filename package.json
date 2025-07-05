@@ -11,14 +11,17 @@
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
+    "@splinetool/react-spline": "^4.0.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
-    "next": "15.3.4",
+    "next": "^15.3.5",
     "nodemailer": "^7.0.4",
     "prisma": "^6.11.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-parallax-tilt": "^1.7.299",
+    "swiper": "^11.2.10"
   },
   "devDependencies": {
     "@types/node": "^20",

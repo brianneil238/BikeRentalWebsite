@@ -45,7 +45,21 @@ export default function RegisterPage() {
       setError("Please fill in all fields.");
       return;
     }
-    setSuccess("Registration successful! You can now log in.");
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullName, email, password, role }),
+    });
+    let data = null;
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      data = await res.json();
+    }
+    if (res.ok) {
+      setSuccess("Registration successful! You can now log in.");
+    } else {
+      setError((data && data.error) || "Registration failed");
+    }
   };
 
   const inputGroupStyle = {

@@ -1,9 +1,27 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+function Icon({ type }: { type: string }) {
+  switch (type) {
+    case "mail":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>;
+    case "lock":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="8" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>;
+    case "eye":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>;
+    case "eye-off":
+      return <svg width="20" height="20" fill="none" stroke="#888" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.77 21.77 0 0 1 5.06-6.06M1 1l22 22"/><path d="M9.53 9.53A3.5 3.5 0 0 0 12 15.5a3.5 3.5 0 0 0 2.47-5.97"/></svg>;
+    default:
+      return null;
+  }
+}
+
 export default function LoginPage() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [notRobot, setNotRobot] = useState(false);
@@ -23,53 +41,109 @@ export default function LoginPage() {
     });
     if (res.ok) {
       setSuccess("Login successful!");
+      router.push("/dashboard");
     } else {
-      const data = await res.json();
-      setError(data.error || "Login failed");
+      let data = null;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+      setError((data && data.error) || "Login failed");
     }
   };
 
+  const inputGroupStyle = {
+    display: "flex",
+    alignItems: "center",
+    background: "#f7f7f7",
+    borderRadius: 6,
+    border: "1px solid #ccc",
+    marginBottom: 16,
+    padding: 0,
+    height: 48,
+  } as const;
+  const iconBoxStyle = {
+    background: "#e9ecef",
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    width: 48,
+    height: 48,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  } as const;
+  const inputStyle = {
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontSize: 16,
+    padding: "0 12px",
+    flex: 1,
+    height: 48,
+    color: "#000",
+  } as const;
+
   return (
-    <div style={{
-      minHeight: "100vh",
-      width: "100vw",
-      backgroundImage: `url('/car-rental-app.jpg')`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundColor: "#aaa",
-      position: "relative"
-    }}>
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(128,128,128,0.7)",
-        zIndex: 1
-      }} />
-      <div style={{
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100vw",
+        backgroundImage: `url('/car-rental-app.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#aaa",
         position: "relative",
-        zIndex: 2,
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        height: "100vh",
-        paddingLeft: "1100px",
-        paddingTop: "120px"
-      }}>
-        <div style={{
-          background: "#f5f5f5",
-          borderRadius: 20,
-          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-          padding: "40px 40px 24px 40px",
-          width: 400,
-          maxWidth: "90vw",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(128,128,128,0.7)",
+          zIndex: 1,
+        }}
+        />
+      <style>{`
+        @media (max-width: 600px) {
+          .login-flex-container {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+        }
+      `}</style>
+      <div
+        className="login-flex-container"
+        style={{
+          position: "relative",
+          zIndex: 2,
           display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch"
-        }}>
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+          height: "100vh",
+          paddingLeft: "0",
+          paddingRight: "5vw",
+          paddingTop: "8vw",
+        }}
+      >
+        <div
+          style={{
+            background: "#f5f5f5",
+            borderRadius: 20,
+            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            padding: "32px 16px 16px 16px",
+            width: "100%",
+            maxWidth: 400,
+            minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
             <img src="/spartan_logo.png" alt="Sparta Logo" style={{ width: 48, height: 48, marginRight: 10 }} />
             <div>
@@ -77,44 +151,44 @@ export default function LoginPage() {
               <div style={{ fontSize: 14, color: "#444" }}>Rent. Ride. Return. Spartan-style.</div>
             </div>
           </div>
-          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500 }}>Please Log In</h2>
+          <h2 style={{ margin: "18px 0 18px 0", fontWeight: 500, color: "#222" }}>Please Log In</h2>
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: 14 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="mail" /></div>
               <input
                 type="text"
                 placeholder="Email"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
-              />
+                style={inputStyle}
+            />
             </div>
-            <div style={{ marginBottom: 6 }}>
+            <div style={inputGroupStyle}>
+              <div style={iconBoxStyle}><Icon type="lock" /></div>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                style={{
-                  width: "100%",
-                  padding: "12px 12px 12px 40px",
-                  borderRadius: 6,
-                  border: "1px solid #ccc",
-                  fontSize: 16,
-                  background: `url('data:image/svg+xml;utf8,<svg fill=\'gray\' height=\'20\' viewBox=\'0 0 24 24\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-7V7a6 6 0 0 0-12 0v3a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-8-3a4 4 0 0 1 8 0v3H6V7z\'/></svg>') no-repeat 10px center`,
-                  backgroundColor: "#f7f7f7"
-                }}
+                style={inputStyle}
               />
-            </div>
+              <button
+                type="button"
+                onClick={() => setShowPassword(s => !s)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "0 12px 0 0"
+                }}
+                tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+                <Icon type={showPassword ? "eye-off" : "eye"} />
+              </button>
+        </div>
             <div style={{ fontSize: 12, color: "#888", marginBottom: 10 }}>* Password is case sensitive</div>
             <div style={{
               background: "#f7f7f7",
@@ -132,7 +206,7 @@ export default function LoginPage() {
                   checked={notRobot}
                   onChange={e => setNotRobot(e.target.checked)}
                   style={{ marginRight: 8, width: 18, height: 18 }}
-                />
+          />
                 I'm not a robot
               </label>
               <span style={{ fontSize: 11, color: "#888" }}>
@@ -158,12 +232,18 @@ export default function LoginPage() {
             >
               Sign In
             </button>
+            {/* Forgot password link */}
+            <div style={{ textAlign: "center", marginBottom: 8 }}>
+              <a href="/forgot-password" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500, cursor: "pointer" }}>
+                Forgot password?
+              </a>
+            </div>
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
-          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8 }}>
+          <div style={{ textAlign: "center", fontSize: 15, marginTop: 8, color: "#222" }}>
             Don't have an account?{' '}
-            <a href="#" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
+            <a href="/register" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
           </div>
         </div>
       </div>

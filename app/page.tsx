@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function Icon({ type }: { type: string }) {
@@ -17,6 +18,7 @@ function Icon({ type }: { type: string }) {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -39,9 +41,14 @@ export default function LoginPage() {
     });
     if (res.ok) {
       setSuccess("Login successful!");
+      router.push("/dashboard");
     } else {
-      const data = await res.json();
-      setError(data.error || "Login failed");
+      let data = null;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+      setError((data && data.error) || "Login failed");
     }
   };
 
@@ -99,7 +106,7 @@ export default function LoginPage() {
           background: "rgba(128,128,128,0.7)",
           zIndex: 1,
         }}
-      />
+        />
       <style>{`
         @media (max-width: 600px) {
           .login-flex-container {
@@ -155,7 +162,7 @@ export default function LoginPage() {
                 onChange={e => setUsername(e.target.value)}
                 required
                 style={inputStyle}
-              />
+            />
             </div>
             <div style={inputGroupStyle}>
               <div style={iconBoxStyle}><Icon type="lock" /></div>
@@ -178,10 +185,10 @@ export default function LoginPage() {
                 }}
                 tabIndex={-1}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-              >
+          >
                 <Icon type={showPassword ? "eye-off" : "eye"} />
               </button>
-            </div>
+        </div>
             <div style={{ fontSize: 12, color: "#888", marginBottom: 10 }}>* Password is case sensitive</div>
             <div style={{
               background: "#f7f7f7",
@@ -199,7 +206,7 @@ export default function LoginPage() {
                   checked={notRobot}
                   onChange={e => setNotRobot(e.target.checked)}
                   style={{ marginRight: 8, width: 18, height: 18 }}
-                />
+          />
                 I'm not a robot
               </label>
               <span style={{ fontSize: 11, color: "#888" }}>
@@ -225,6 +232,12 @@ export default function LoginPage() {
             >
               Sign In
             </button>
+            {/* Forgot password link */}
+            <div style={{ textAlign: "center", marginBottom: 8 }}>
+              <a href="/forgot-password" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500, cursor: "pointer" }}>
+                Forgot password?
+              </a>
+            </div>
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}

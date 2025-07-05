@@ -29,29 +29,30 @@ export async function POST(req: NextRequest) {
   });
 
   // Generate reset link
-  const resetLink = `https://your-domain.com/reset-password?token=${token}`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.EMAIL_SERVER,
+    port: Number(process.env.EMAIL_PORT),
+    secure:true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    tls: {
+      rejectUnauthorized: false, // <--- Add this line
+    },
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Password Reset Request",
-    html: `<p>You requested a password reset for your BSU Bike Rental account.</p>
-           <p>Click <a href='${resetLink}'>here</a> to reset your password. This link will expire in 1 hour.</p>
-           <p>If you did not request this, please ignore this email.</p>`
-  };
+  console.log('EMAIL_USER:', process.env.EMAIL_USER);
+  console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
-  try {
-    await transporter.sendMail(mailOptions);
-    return NextResponse.json({ message: "If this email is registered, a reset link has been sent." });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
-  }
+  await transporter.sendMail({
+    to: user.email,
+    subject: "Password Reset",
+    text: `Reset link: ${resetLink}`,
+  });
+
+  return NextResponse.json({ message: "If this email is registered, a reset link has been sent." });
 } 
