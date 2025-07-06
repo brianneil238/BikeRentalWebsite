@@ -18,3 +18,38 @@ model User {
   passwordResetExpiry DateTime? // nullable, for expiry time
 }
 
+model Bike {
+  id        String   @id @default(uuid())
+  name      String
+  status    String   @default("available")
+  createdAt DateTime @default(now())
+  applications BikeRentalApplication[]
+}
+
+model BikeRentalApplication {
+  id            String   @id @default(uuid())
+  lastName      String
+  firstName     String
+  middleName    String?
+  srCode        String
+  sex           String
+  dateOfBirth   DateTime
+  phoneNumber   String
+  email         String
+  collegeProgram String
+  gwaLastSemester String
+  extracurricularActivities String?
+  houseNo       String
+  streetName    String
+  barangay      String
+  municipality  String
+  province      String
+  distanceFromCampus String
+  familyIncome  String
+  intendedDuration String
+  intendedDurationOther String?
+  bike          Bike?    @relation(fields: [bikeId], references: [id])
+  bikeId        String?
+  createdAt     DateTime @default(now())
+}
+

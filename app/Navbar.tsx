@@ -38,7 +38,7 @@ export default function Navbar() {
           </a>
         ))}
       </div>
-      <button style={{ background: '#e0e0e0', color: '#222', fontWeight: 600, border: 'none', borderRadius: 8, padding: '8px 22px', fontSize: 16, cursor: 'pointer', marginLeft: 24, backgroundClip: 'padding-box', zIndex: 11 }} onClick={() => { window.location.href = '/'; }}>Logout</button>
+      <button style={{ background: '#e0e0e0', color: '#222', fontWeight: 600, border: 'none', borderRadius: 8, padding: '8px 22px', fontSize: 16, cursor: 'pointer', marginLeft: 24, backgroundClip: 'padding-box', zIndex: 11 }} onClick={() => { localStorage.removeItem('user'); window.location.href = '/'; }}>Logout</button>
       {/* Hamburger icon for mobile */}
       <button
         className="hamburger"
@@ -121,7 +121,7 @@ export default function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <button style={{ background: '#e0e0e0', color: '#222', fontWeight: 600, border: 'none', borderRadius: 8, padding: '10px 0', fontSize: 18, cursor: 'pointer', marginTop: 24 }} onClick={() => { window.location.href = '/'; }}>Logout</button>
+              <button style={{ background: '#e0e0e0', color: '#222', fontWeight: 600, border: 'none', borderRadius: 8, padding: '10px 0', fontSize: 18, cursor: 'pointer', marginTop: 24 }} onClick={() => { localStorage.removeItem('user'); window.location.href = '/'; }}>Logout</button>
             </div>
           </div>
         </div>

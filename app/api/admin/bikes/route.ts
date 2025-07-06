@@ -1,0 +1,54 @@
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export async function GET() {
+  try {
+    const bikes = await prisma.bike.findMany({
+      include: {
+        applications: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            srCode: true,
+            email: true,
+            createdAt: true,
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    
+    return NextResponse.json({ success: true, bikes });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+    if (!data.name || typeof data.name !== 'string' || !data.name.trim()) {
+      return NextResponse.json({ success: false, error: 'Plate number is required.' }, { status: 400 });
+    }
+    const status = data.status === 'rented' ? 'rented' : 'available';
+    // Prevent duplicate plate numbers
+    const existing = await prisma.bike.findFirst({ where: { name: data.name.trim() } });
+    if (existing) {
+      return NextResponse.json({ success: false, error: 'A bike with this plate number already exists.' }, { status: 400 });
+    }
+    const bike = await prisma.bike.create({
+      data: {
+        name: data.name.trim(),
+        status,
+      },
+    });
+    return NextResponse.json({ success: true, bike });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
+  }
+} 

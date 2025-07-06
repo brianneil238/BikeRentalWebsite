@@ -25,6 +25,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [notRobot, setNotRobot] = useState(false);
+  const [savedUser, setSavedUser] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +41,13 @@ export default function LoginPage() {
       body: JSON.stringify({ username, password }),
     });
     if (res.ok) {
+      const data = await res.json();
       setSuccess("Login successful!");
+      if (data.user) {
+        console.log('Saving user to localStorage:', data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        setSavedUser(data.user);
+      }
       router.push("/dashboard");
     } else {
       let data = null;
@@ -241,6 +248,12 @@ export default function LoginPage() {
           </form>
           {error && <p style={{ color: "#b22222", margin: 0, marginBottom: 8 }}>{error}</p>}
           {success && <p style={{ color: "green", margin: 0, marginBottom: 8 }}>{success}</p>}
+          {savedUser && (
+            <div style={{ background: '#e0f7fa', color: '#1976d2', padding: 12, borderRadius: 8, marginBottom: 12, fontSize: 14 }}>
+              <b>Saved user to localStorage:</b>
+              <pre style={{ margin: 0, fontSize: 13 }}>{JSON.stringify(savedUser, null, 2)}</pre>
+            </div>
+          )}
           <div style={{ textAlign: "center", fontSize: 15, marginTop: 8, color: "#222" }}>
             Don't have an account?{' '}
             <a href="/register" style={{ color: "#1976d2", textDecoration: "underline", fontWeight: 500 }}>Sign Up</a>
